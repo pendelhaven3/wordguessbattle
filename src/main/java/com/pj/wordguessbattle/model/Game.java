@@ -1,7 +1,9 @@
-package com.pj.wordguessbattle;
+package com.pj.wordguessbattle.model;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
@@ -10,6 +12,7 @@ public class Game {
 
 	private WordPool wordPool = new WordPool();
 	private String targetWord;
+	private List<WordAttack> attacks = new ArrayList<>();
 	
 	public Game() {
 		assignTargetWord();
@@ -28,7 +31,11 @@ public class Game {
 		}
 	}
 	
-	public int attack(String attackWord) {
+	public void attack(String attackWord) {
+		attacks.add(new WordAttack(attackWord, getHits(attackWord)));
+	}
+
+	private int getHits(String attackWord) {
 		int hits = 0;
 		for (char c : getUniqueLetters(attackWord)) {
 			if (doesTargetWordContainLetter(c)) {
@@ -54,9 +61,8 @@ public class Game {
 		return targetWord;
 	}
 	
-	public static void main(String[] args) {
-		Game game = new Game();
-		System.out.println(game.attack("beep"));
+	public List<WordAttack> getAttacks() {
+		return attacks;
 	}
 	
 }

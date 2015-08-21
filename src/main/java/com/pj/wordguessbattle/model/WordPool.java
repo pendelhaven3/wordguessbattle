@@ -1,4 +1,4 @@
-package com.pj.wordguessbattle;
+package com.pj.wordguessbattle.model;
 
 import java.util.ArrayList;
 import java.util.List;
