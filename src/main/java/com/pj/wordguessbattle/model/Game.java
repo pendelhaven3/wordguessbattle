@@ -2,11 +2,11 @@ package com.pj.wordguessbattle.model;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import org.apache.commons.io.IOUtils;
+
+import com.pj.wordguessbattle.util.WordUtil;
 
 public class Game {
 
@@ -16,6 +16,7 @@ public class Game {
 	
 	public Game() {
 		assignTargetWord();
+		System.out.println(targetWord);
 	}
 
 	private void assignTargetWord() {
@@ -31,13 +32,15 @@ public class Game {
 		}
 	}
 	
-	public void attack(String attackWord) {
-		attacks.add(new WordAttack(attackWord, getHits(attackWord)));
+	public WordAttack attack(String attackWord) {
+		WordAttack attack = new WordAttack(attackWord, getHits(attackWord));
+		attacks.add(attack);
+		return attack;
 	}
 
 	private int getHits(String attackWord) {
 		int hits = 0;
-		for (char c : getUniqueLetters(attackWord)) {
+		for (char c : WordUtil.getUniqueLetters(attackWord)) {
 			if (doesTargetWordContainLetter(c)) {
 				hits++;
 			}
@@ -49,20 +52,24 @@ public class Game {
 		return targetWord.indexOf(c) != -1;
 	}
 
-	private Set<Character> getUniqueLetters(String attackWord) {
-		Set<Character> letters = new HashSet<>();
-		for (char c : attackWord.toCharArray()) {
-			letters.add(c);
-		}
-		return letters;
-	}
-	
 	public String getTargetWord() {
 		return targetWord;
 	}
 	
 	public List<WordAttack> getAttacks() {
 		return attacks;
+	}
+
+	public boolean isVictoryConditionMet() {
+		if (!attacks.isEmpty()) {
+			return attacks.get(attacks.size() - 1).getWord().equals(targetWord);
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isValidAttackWord(String attackWord) {
+		return wordPool.contains(attackWord);
 	}
 	
 }

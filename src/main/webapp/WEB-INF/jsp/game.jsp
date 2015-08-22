@@ -7,9 +7,29 @@
 	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
 	<script>
 		$(document).ready(function() {
-			$('#word').focus();
+			var $word = $('#word');
+			$word.focus();
 			$('#fireButton').click(function() {
-				$('#attackForm').submit();
+				var word = $('#word').val();
+				if (word == '') {
+					alert('You must enter a word!');
+					$word.focus();
+				} else if (word.length != 4) {
+					alert('Word must contain exactly 4 letters');
+					$word.focus();
+				} else {
+					$.get(
+						'/game/attack', 
+						{word: word},
+						function(result) {
+							if (result.error) {
+								alert('You must use a valid word!');
+							} else {
+								alert((result.hits ? result.hits : 'None') + ' of your missiles hit the enemy base!');
+								window.location = '/game';
+							}
+						});
+				}
 			});
 		});
 	</script>
